@@ -53,7 +53,7 @@ app.post("/submit",async (req,res)=>{
     answer = req.body.answer;
     if(answer=="")
     {
-        totalCorrect;
+        totalCorrect=0;
         await randomCountry(); 
         console.log(currentQuestion);
         res.render("index.ejs",
