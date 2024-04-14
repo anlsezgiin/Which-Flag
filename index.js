@@ -22,6 +22,7 @@ db.connect();
 let currentQuestion = {};
 let totalCorrect = 0;
 let countries = [];
+let answer;
 
 async function randomCountry()
 {
@@ -30,7 +31,6 @@ async function randomCountry()
         const result = await db.query("SELECT * FROM countries");
         countries = result.rows;
         currentQuestion = countries[Math.floor(Math.random()*countries.length)];
-        return currentQuestion;
     }
     catch(err)
     {
@@ -44,8 +44,49 @@ app.get("/",async (req,res)=>
     console.log(currentQuestion);
     res.render("index.ejs",
 {
-    country: currentQuestion.country_code
+    country: currentQuestion.country_code,
+    totalCorrect:totalCorrect
 });
+});
+
+app.post("/submit",async (req,res)=>{
+    answer = req.body.answer;
+    if(answer=="")
+    {
+        totalCorrect;
+        await randomCountry(); 
+        console.log(currentQuestion);
+        res.render("index.ejs",
+        {
+            country: currentQuestion.country_code,
+            totalCorrect:totalCorrect
+        });
+    }
+    else
+    {
+        if(answer.toLowerCase()==(currentQuestion.country_name).toLowerCase())
+        {
+            totalCorrect++;
+            await randomCountry();
+            console.log(currentQuestion);
+            res.render("index.ejs",
+        {
+            country: currentQuestion.country_code,
+            totalCorrect:totalCorrect
+        });
+        }
+        else
+        {
+            totalCorrect=0;
+            await randomCountry();
+            console.log(currentQuestion);
+            res.render("index.ejs",
+        {
+            country: currentQuestion.country_code,
+            totalCorrect:totalCorrect
+        });
+        }
+    }
 });
 
 app.listen(port,(req,res)=>
