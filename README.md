@@ -27,7 +27,7 @@
 
     ```bash
     git clone https://github.com/user/which-flag-game.git
-    cd which-flag-game
+    cd which-flag
     ```
 
 2. Install the required packages:
